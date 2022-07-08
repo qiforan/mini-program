@@ -5,6 +5,22 @@ Page({
      * Page initial data
      */
     data: {
+        screenWidth: 1000,
+        screenHeight: 1000,
+
+        search: "",
+
+        date: "",
+        allMissions: [],
+        missions: [],
+        unfinishedMission: [],
+        finishedMission: [],
+
+        slideButtons: [
+            { extClass: 'markBtn', text: '标记', src: "Images/icon_mark.svg" },
+            { extClass: 'starBtn', text: '星标', src: "Images/icon_star.svg" },
+            { extClass: 'removeBtn', text: '删除', src: 'Images/icon_del.svg' }
+        ]
 
     },
 
@@ -26,7 +42,7 @@ Page({
      * Lifecycle function--Called when page show
      */
     onShow() {
-
+        this.selectComponent('#calendar').toggleType();
     },
 
     /**
@@ -62,5 +78,27 @@ Page({
      */
     onShareAppMessage() {
 
+    },
+    onSearch(e) {
+        this.setData({
+            search: e.detail.value
+        })
+    },
+    tapCalendar(e) {
+        console.log('tap Calendar');
+        console.log(e)
+    },
+    updateList() {
+        mission = []
+        allMissions.forEach(mission => {
+            if (mission.date == this.data.date) {
+                mission.push(mission)
+            }
+        })
+    },
+    async toDetailPage(element, isUpper) {
+        const missionIndex = element.currentTarget.dataset.index;
+        const mission = isUpper ? this.data.unfinishedMission[missionIndex] : this.data.finishedMission[missionIndex];
+        wx.navigateTo({url: '../MissionDetail/index?id=' + mission.id});
     }
 })

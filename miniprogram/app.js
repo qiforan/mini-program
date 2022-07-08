@@ -1,6 +1,11 @@
 App({
     async onLaunch() {
         this.initCloud();
+        this.globalData = {
+            userA: '卡比',
+            userB: '瓦豆',
+            maxCredit: 500,
+        }
 
     },
     flag: false,

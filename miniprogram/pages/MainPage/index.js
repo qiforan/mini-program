@@ -5,6 +5,19 @@ Page({
      * Page initial data
      */
     data: {
+        imgUrls: [
+            "Images/HomeCover01.jpg",
+            "Images/HomeCover02.jpg",
+            "Images/HomeCover03.jpg",
+        ],
+        creditA: 0,
+        creditB: 0,
+
+        userA: 'A',
+        userB: 'B',
+
+        paired: false,
+        localPairCode: '123',
 
     },
 
@@ -26,7 +39,11 @@ Page({
      * Lifecycle function--Called when page show
      */
     onShow() {
-
+        this.getCredit();
+        this.setData({
+            userA: getApp().globalData.userA,
+            userB: getApp().globalData.userB
+        })
     },
 
     /**
@@ -62,5 +79,13 @@ Page({
      */
     onShareAppMessage() {
 
+    },
+    getCredit() {
+        // TODO: get creditA from cloud database
+        this.setData({
+            creditA: 1,
+            creditB: 2
+        })
     }
+
 })

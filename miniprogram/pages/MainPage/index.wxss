@@ -1,1 +1,43 @@
 /* pages/MainPage/index.wxss */
+
+.pair-container {
+    display: flex;
+    justify-content: center;
+    align-items: left;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    border: 1px solid black;
+}
+.pair-container text {
+    border: 1px solid blue;
+}
+.pair-container input {
+    
+    border: 1px solid red;
+}
+
+.form-cell {
+  padding: 0;
+}
+
+.slide {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+}
+
+.title {
+  font-size: 12px;
+}
+
+.swiper-image{
+  display: block;
+  height: 100%; 
+  width: 100%;
+  position: relative;
+  background-color: darkgray;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
