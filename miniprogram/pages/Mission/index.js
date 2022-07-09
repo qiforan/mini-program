@@ -42,6 +42,11 @@ Page({
      * Lifecycle function--Called when page show
      */
     onShow() {
+        await wx.cloud.callFunction({name: 'getList', data: {
+            list: getApp().globalData.collectionMissionList
+        }}).then(data => {
+            this.setData({allMissions: data.result.data})
+        })
         this.selectComponent('#calendar').toggleType();
     },
 

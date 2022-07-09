@@ -18,8 +18,8 @@
         </view>
         <view class="form-cell">
             <view class="slide">
-                <input class="title" placeholder="对方匹配码"/>
-                <button>匹配</button>
+                <input class="title" placeholder="对方匹配码" model:value="{{inputCode}}" />
+                <button bindtap="clickButton">匹配</button>
             </view>
         </view>
     </view>

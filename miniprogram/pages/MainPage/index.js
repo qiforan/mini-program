@@ -18,74 +18,69 @@ Page({
 
         paired: false,
         localPairCode: '123',
-
-    },
-
-    /**
-     * Lifecycle function--Called when page load
-     */
-    onLoad(options) {
-
-    },
-
-    /**
-     * Lifecycle function--Called when page is initially rendered
-     */
-    onReady() {
+        inputCode: '',
+        openid: ''
 
     },
 
     /**
      * Lifecycle function--Called when page show
      */
-    onShow() {
+    async onShow() {
         this.getCredit();
+        let that = this;
         this.setData({
             userA: getApp().globalData.userA,
             userB: getApp().globalData.userB
         })
+        const res = await wx.cloud.callFunction({
+            name: 'getUserInfo',
+            data: {}
+        });
+        this.setData({
+            localPairCode: res.result.pairCode
+        })
+        this.data.openid = res.result.openid
+        console.log(res.result);
+        const db = wx.cloud.database();
+        if (!this.data.paired) {
+            const watcher = db.collection('UserList').where({
+                _openid: this.data.openid
+            }).watch({
+                onChange: function (snapshot) {
+                    const record = snapshot.docs[0];
+                    console.log(record);
+                    if (record.paired !== false) {
+                        that.setData({
+                            paired: true
+                        })
+                        watcher.close()
+                    }
+                },
+                onError: console.error
+            })
+        }
     },
 
-    /**
-     * Lifecycle function--Called when page hide
-     */
-    onHide() {
-
-    },
-
-    /**
-     * Lifecycle function--Called when page unload
-     */
-    onUnload() {
-
-    },
-
-    /**
-     * Page event handler function--Called when user drop down
-     */
-    onPullDownRefresh() {
-
-    },
-
-    /**
-     * Called when page reach bottom
-     */
-    onReachBottom() {
-
-    },
-
-    /**
-     * Called when user click on the top right corner to share
-     */
-    onShareAppMessage() {
-
-    },
     getCredit() {
         // TODO: get creditA from cloud database
         this.setData({
             creditA: 1,
             creditB: 2
         })
+    },
+
+    async clickButton() {
+        if (this.data.inputCode !== '') {
+            console.log(this.data.inputCode);
+            const res = await wx.cloud.callFunction({
+                name: 'updateUser',
+                data: {
+                    pairCode: this.data.localPairCode
+                }
+            })
+            console.log(res);
+        }
     }
 
 })

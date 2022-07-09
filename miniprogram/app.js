@@ -5,6 +5,12 @@ App({
             userA: '卡比',
             userB: '瓦豆',
             maxCredit: 500,
+            _openidA: 'onsgK5XqCMLbYXudVgh3xjV4kgWw',
+            _openidB: 'onsgK5Zc7t-bFdnFk3_krqdIRZYY',
+            collectionMissionList: 'MissionList',
+            collectionMarketList: 'MarketList',
+            collectionStorageList: 'StorageList',
+            collectionUserList: 'UserList',
         }
 
     },
