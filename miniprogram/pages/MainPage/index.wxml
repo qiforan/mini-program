@@ -13,12 +13,12 @@
     <view class="form-group" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.05);">
         <view class="form-cell">
             <view class="slide">
-                <view class="title"> 本机匹配码： {{localPairCode}} </view>
+                <view class="title"> 本机匹配码： {{pairCode}} </view>
             </view>
         </view>
         <view class="form-cell">
             <view class="slide">
-                <input class="title" placeholder="对方匹配码" model:value="{{inputCode}}" />
+                <input class="title" placeholder="对方匹配码" model:value="{{peerCode}}" />
                 <button bindtap="clickButton">匹配</button>
             </view>
         </view>
@@ -29,12 +29,12 @@
     <view class="form-group" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.05);">
         <view class="form-cell">
             <view class="slide">
-                <view class="title">{{userA}} 的积分：{{creditA}}</view>
+                <view class="title">{{selfInfo.name}} 的积分：{{selfInfo.credit}}</view>
             </view>
         </view>
         <view class="form-cell">
             <view class="slide">
-                <view class="title">{{userB}} 的积分：{{creditB}}</view>
+                <view class="title">{{peerInfo.name}} 的积分：{{peerInfo.credit}}</view>
             </view>
         </view>
     </view>

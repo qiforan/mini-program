@@ -9,7 +9,7 @@ exports.main = async (event, context) => {
     const wxContext = cloud.getWXContext();
     const openid = wxContext.OPENID;
     let paired = false;
-    let pairCode = Math.random().toString(36).substring(2);
+    let pairCode = Math.random().toString(36).substring(2,8);
     let credit = 0;
     res = await db.collection('UserList').where({
         _openid: openid

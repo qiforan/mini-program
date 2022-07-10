@@ -10,77 +10,86 @@ Page({
             "Images/HomeCover02.jpg",
             "Images/HomeCover03.jpg",
         ],
-        creditA: 0,
-        creditB: 0,
-
-        userA: 'A',
-        userB: 'B',
 
         paired: false,
-        localPairCode: '123',
-        inputCode: '',
-        openid: ''
+        peerCode: '',
 
+        selfInfo: {
+            name: '',
+            credit: 0,
+            openid: '',
+            pairCode: '',
+        },
+        peerInfo:{
+            name: '',
+            credit: 0,
+            openid: '',
+            pairCode: '',
+        }
     },
 
     /**
      * Lifecycle function--Called when page show
      */
     async onShow() {
-        this.getCredit();
         let that = this;
+
+        this.getCredit();
         this.setData({
             userA: getApp().globalData.userA,
             userB: getApp().globalData.userB
         })
-        const res = await wx.cloud.callFunction({
+        let {result} = await wx.cloud.callFunction({
             name: 'getUserInfo',
             data: {}
         });
+        console.log(result);
         this.setData({
-            localPairCode: res.result.pairCode
+            'selfInfo.pairCode': result.pairCode,
+            'selfInfo.openid': result.openid
         })
-        this.data.openid = res.result.openid
-        console.log(res.result);
         const db = wx.cloud.database();
         if (!this.data.paired) {
-            const watcher = db.collection('UserList').where({
-                _openid: this.data.openid
+            this.userWatcher = db.collection('UserList').where({
+                _openid: this.data.selfInfo.openid
             }).watch({
                 onChange: function (snapshot) {
                     const record = snapshot.docs[0];
-                    console.log(record);
                     if (record.paired !== false) {
                         that.setData({
                             paired: true
                         })
-                        watcher.close()
+                        // const {result:selfInfo} = await db.collection('UserList').where({
+                        //     _openid: this.data.openid
+                        // })
                     }
                 },
                 onError: console.error
             })
         }
     },
+    onUnload: function() {
+        console.log('MainPage hide')
+        this.userWatcher.close();
+    },
 
     getCredit() {
         // TODO: get creditA from cloud database
         this.setData({
-            creditA: 1,
-            creditB: 2
+            'selfInfo.credit': 1,
+            'peerInfo.credit': 2,
         })
     },
 
     async clickButton() {
-        if (this.data.inputCode !== '') {
-            console.log(this.data.inputCode);
-            const res = await wx.cloud.callFunction({
+        if (this.data.peerCode !== '') {
+            const {result} = await wx.cloud.callFunction({
                 name: 'updateUser',
                 data: {
-                    pairCode: this.data.localPairCode
+                    pairCode: this.data.peerCode
                 }
             })
-            console.log(res);
+            console.log(result);
         }
     }
-
 })

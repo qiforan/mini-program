@@ -13,8 +13,8 @@ Page({
         date: "",
         allMissions: [],
         missions: [],
-        unfinishedMission: [],
-        finishedMission: [],
+        unfinishedMissions: [],
+        finishedMissions: [],
 
         slideButtons: [
             { extClass: 'markBtn', text: '标记', src: "Images/icon_mark.svg" },
@@ -23,66 +23,20 @@ Page({
         ]
 
     },
-
-    /**
-     * Lifecycle function--Called when page load
-     */
-    onLoad(options) {
-
-    },
-
-    /**
-     * Lifecycle function--Called when page is initially rendered
-     */
-    onReady() {
-
-    },
-
     /**
      * Lifecycle function--Called when page show
      */
-    onShow() {
-        await wx.cloud.callFunction({name: 'getList', data: {
-            list: getApp().globalData.collectionMissionList
-        }}).then(data => {
-            this.setData({allMissions: data.result.data})
+    async onShow() {
+        await wx.cloud.callFunction({
+            name: 'getList', data: {
+                list: getApp().globalData.collectionMissionList
+            }
+        }).then(data => {
+            console.log(data.result.data)
+            this.setData({ allMissions: data.result.data })
         })
-        this.selectComponent('#calendar').toggleType();
-    },
-
-    /**
-     * Lifecycle function--Called when page hide
-     */
-    onHide() {
-
-    },
-
-    /**
-     * Lifecycle function--Called when page unload
-     */
-    onUnload() {
-
-    },
-
-    /**
-     * Page event handler function--Called when user drop down
-     */
-    onPullDownRefresh() {
-
-    },
-
-    /**
-     * Called when page reach bottom
-     */
-    onReachBottom() {
-
-    },
-
-    /**
-     * Called when user click on the top right corner to share
-     */
-    onShareAppMessage() {
-
+        // this.selectComponent('#calendar').toggleType();
+        this.updateList()
     },
     onSearch(e) {
         this.setData({
@@ -94,6 +48,11 @@ Page({
         console.log(e)
     },
     updateList() {
+        this.setData({
+            unfinishedMissions: this.data.allMissions.filter(item => item.available === true),
+            finishedMissions: this.data.allMissions.filter(item => item.available !== true),
+        })
+        return
         mission = []
         allMissions.forEach(mission => {
             if (mission.date == this.data.date) {
@@ -104,6 +63,9 @@ Page({
     async toDetailPage(element, isUpper) {
         const missionIndex = element.currentTarget.dataset.index;
         const mission = isUpper ? this.data.unfinishedMission[missionIndex] : this.data.finishedMission[missionIndex];
-        wx.navigateTo({url: '../MissionDetail/index?id=' + mission.id});
+        wx.navigateTo({ url: '../MissionDetail/index?id=' + mission.id });
+    },
+    async toAddPage() {
+        wx.navigateTo({ url: '../MissionAdd/index' })
     }
 })
